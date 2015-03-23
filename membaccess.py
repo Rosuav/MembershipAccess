@@ -1,32 +1,35 @@
 import os
 import csv
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
+import sys
 
-gauth = GoogleAuth()
-gauth.LocalWebserverAuth()
+def auth():
+	from pydrive.auth import GoogleAuth
+	from pydrive.drive import GoogleDrive
 
-drive = GoogleDrive(gauth)
+	gauth = GoogleAuth()
+	gauth.LocalWebserverAuth()
 
-if False:
+	return GoogleDrive(gauth)
+
+def cmd_list():
+	drive=auth()
 	for f in drive.ListFile({"q":"title contains 'G&S Soc'"}).GetList():
 		print(f['id']+" "+f['title'])
 
-# File to view. Use the above to figure out what file.
-id = "0AkDXTfWtDy1VdFY1Wm84OGJGanp0WTM4ek1aMnBnZkE"
+def cmd_fetch():
+	drive=auth()
+	# File to view. Use cmd_list() to figure out what file.
+	id = "0AkDXTfWtDy1VdFY1Wm84OGJGanp0WTM4ek1aMnBnZkE"
 
-file = drive.CreateFile({'id': id})
-print file['title']
-print file['mimeType']
-if u'text/csv' not in file.metadata['exportLinks']:
-	# Current versions of PyDrive don't provide CSV download links, but it seems quite functional
-	file.metadata['exportLinks'][u'text/csv'] = file.metadata['exportLinks'][u'application/pdf'][:-3]+u"csv"
-# Current versions of PyDrive don't support GetContentString() with a mimetype parameter, but the Python
-# 'csv' module doesn't support reading from a string anyway, so we dump out to a file.
-fn="/tmp/membership.csv"
-file.GetContentFile(fn,mimetype="text/csv")
-with open(fn) as f:
-	for row in csv.DictReader(f):
-		print(row)
-		break
-os.remove(fn)
+	file = drive.CreateFile({'id': id})
+	print file['title']
+	print file['mimeType']
+	if u'text/csv' not in file.metadata['exportLinks']:
+		# Current versions of PyDrive don't provide CSV download links, but it seems quite functional
+		file.metadata['exportLinks'][u'text/csv'] = file.metadata['exportLinks'][u'application/pdf'][:-3]+u"csv"
+	# Current versions of PyDrive don't support GetContentString() with a mimetype parameter, but the Python
+	# 'csv' module doesn't support reading from a string anyway, so we dump out to a file.
+	file.GetContentFile("membership.csv",mimetype="text/csv")
+
+# If error, throw exception. Bahahaha.
+globals()["cmd_"+sys.argv[1]]()
