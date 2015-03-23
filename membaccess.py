@@ -47,19 +47,22 @@ def cmd_columns():
 	with open(tempfn) as f:
 		print(next(csv.reader(f)))
 
-def cmd_html():
+def generate_html():
 	get_file()
 	cols = ['Title', 'First Name', 'Surname', 'SortCode']
-	print("<!doctype html>")
-	print("<html>")
-	print("<head><title>G&S Society Membership</title></head>")
-	print("<body><table border>")
-	print("<tr><td>"+"</td><td>".join(cols)+"</td></tr>")
+	yield "<!doctype html>"
+	yield "<html>"
+	yield "<head><title>G&S Society Membership</title></head>"
+	yield "<body><table border>"
+	yield "<tr><td>"+"</td><td>".join(cols)+"</td></tr>"
 	with open(tempfn) as f:
 		for row in csv.DictReader(f):
-			print("<tr><td>"+"</td><td>".join(row[col] for col in cols)+"</td></tr>")
-	print("</table></body>")
-	print("</html>")
+			yield "<tr><td>"+"</td><td>".join(row[col] for col in cols)+"</td></tr>"
+	yield "</table></body>"
+	yield "</html>"
+
+def cmd_html():
+	for line in generate_html(): print(line)
 
 # If error, throw exception. Bahahaha.
 globals()["cmd_"+sys.argv[1]]()
