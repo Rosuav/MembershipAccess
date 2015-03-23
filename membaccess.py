@@ -35,6 +35,7 @@ def cmd_fetch():
 	id = "0AkDXTfWtDy1VdFY1Wm84OGJGanp0WTM4ek1aMnBnZkE"
 
 	file = drive.CreateFile({'id': id})
+	file["title"] # Probe the file object to force it to load up the metadata
 	if u'text/csv' not in file.metadata['exportLinks']:
 		# Current versions of PyDrive don't provide CSV download links, but it seems quite functional
 		file.metadata['exportLinks'][u'text/csv'] = file.metadata['exportLinks'][u'application/pdf'][:-3]+u"csv"
