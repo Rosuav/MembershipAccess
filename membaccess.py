@@ -18,7 +18,7 @@ def cmd_list():
 
 def cmd_fetch():
 	drive=auth()
-	# File to view. Use cmd_list() to figure out what file.
+	# File to fetch. Use cmd_list() to figure out what file.
 	id = "0AkDXTfWtDy1VdFY1Wm84OGJGanp0WTM4ek1aMnBnZkE"
 
 	file = drive.CreateFile({'id': id})
