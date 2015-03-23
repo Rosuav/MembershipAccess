@@ -6,13 +6,23 @@ import time
 tempfn = "/tmp/membership.csv"
 
 def auth():
-	from pydrive.auth import GoogleAuth
+	"""Retrieve auth from the saved file - fails if none saved"""
+	from pydrive.auth import GoogleAuth, CheckAuth
 	from pydrive.drive import GoogleDrive
 
 	gauth = GoogleAuth()
-	gauth.LocalWebserverAuth()
-
+	def hacky_auth(gauth):
+		authorize_url = gauth.GetAuthUrl()
+		print("Authorization needed!")
+		print(authorize_url)
+	# This will fail with a noisy exception if the auth can't be loaded.
+	CheckAuth(hacky_auth)(gauth) # Abuse the decorator :)
 	return GoogleDrive(gauth)
+
+def cmd_auth():
+	"""Accept authentication from the console and save it for future use"""
+	from pydrive.auth import GoogleAuth
+	GoogleAuth().CommandLineAuth()
 
 def cmd_list():
 	drive=auth()
