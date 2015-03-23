@@ -57,15 +57,14 @@ def cmd_columns():
 
 def generate_html():
 	get_file()
-	cols = ['Title', 'First Name', 'Surname', 'SortCode']
 	yield "<!doctype html>"
 	yield "<html>"
 	yield "<head><title>G&S Society Membership</title></head>"
 	yield "<body><table border>"
 	yield "<tr><td>"+"</td><td>".join(cols)+"</td></tr>"
 	with open(tempfn) as f:
-		for row in csv.DictReader(f):
-			yield "<tr><td>"+"</td><td>".join(row[col] for col in cols)+"</td></tr>"
+		for row in csv.reader(f):
+			yield "<tr><td>"+"</td><td>".join(row)+"</td></tr>"
 	yield "</table></body>"
 	yield "</html>"
 
