@@ -62,7 +62,6 @@ def generate_html():
 	yield "<html>"
 	yield "<head><title>G&S Society Membership</title></head>"
 	yield "<body><table border>"
-	yield "<tr><td>"+"</td><td>".join(cols)+"</td></tr>"
 	with open(tempfn) as f:
 		for row in csv.reader(f):
 			yield "<tr><td>"+"</td><td>".join(row)+"</td></tr>"
