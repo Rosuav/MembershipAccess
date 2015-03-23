@@ -64,5 +64,6 @@ def generate_html():
 def cmd_html():
 	for line in generate_html(): print(line)
 
-# If error, throw exception. Bahahaha.
-globals()["cmd_"+sys.argv[1]]()
+if __name__ == '__main__':
+	# If error, throw exception. Bahahaha.
+	globals()["cmd_"+sys.argv[1]]()
